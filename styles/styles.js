@@ -5,7 +5,7 @@ export const colors = {
     color1_light: "#F8234E",
     color1_light2: "#FD4D70",
     color2: "#FFFFFF",
-    color3: "#000000",
+    color3: "#303234",
     color4: "transparent",
     color5: "#f2f2f2",
     color6: "#f7f7f7",
@@ -18,7 +18,7 @@ export const defaultStyles = StyleSheet.create({
     backgroundColor: colors.color2,
 });
 
-export const inputStyles = StyleSheet.create({
+export const inputStyling = StyleSheet.create({
     height: 50,
     backgroundColor: colors.color2,
     marginVertical: 10,
