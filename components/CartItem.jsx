@@ -14,6 +14,7 @@ const CartItem = ({
   qty,
   incrementHandler,
   decrementHandler,
+  navigate,
 }) => {
   return (
     <View style={{ flexDirection: "row", height: 100, marginVertical: 20 }}>
@@ -26,6 +27,7 @@ const CartItem = ({
         }}
       >
         <Image
+          
           source={{
             uri: imgSrc,
           }}
@@ -38,7 +40,12 @@ const CartItem = ({
           paddingHorizontal: 25,
         }}
       >
-        <Text style={{ fontSize: 17 }}>{name}</Text>
+        <Text
+          style={{ fontSize: 17 }}
+          onPress={() => navigate.navigate("servicedetails", { id })}
+        >
+          {name}
+        </Text>
         <Text style={{ fontSize: 17, fontWeight: "900" }}>${amount}</Text>
       </View>
       <View style={styles.qtyContainer}>

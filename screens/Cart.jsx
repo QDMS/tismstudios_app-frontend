@@ -61,6 +61,7 @@ const Cart = () => {
         <ScrollView showsVerticalScrollIndicator={false}>
           {cartItems.map((i, index) => (
             <CartItem
+              navigate={navigate}
               key={i.service}
               id={i.service}
               name={i.name}

@@ -1,23 +1,24 @@
-import {
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { Text, TextInput, TouchableOpacity, View } from "react-native";
 import React, { useState } from "react";
-import { colors, defaultStyles, headingText, inputStyling, authStyles as styles } from "../styles/styles";
+import {
+  colors,
+  defaultStyles,
+  headingText,
+  inputStyling,
+  authStyles as styles,
+} from "../styles/styles";
 import SpinningTS from "../components/SpinningTS";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { useTogglePasswordVisibility } from "../components/TogglePassword";
 import { Button } from "react-native-paper";
 import Footer from "../components/Footer";
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { useTogglePasswordVisibility } from "../components/TogglePassword";
 
-const Login = ({ navigation }) => {
-  const [email, setEmail] = useState();
+const Verification = ({ navigation }) => {
+  const [otp, setOtp] = useState();
   const [password, setPassword] = useState();
 
   const { passwordVisibility, rightIcon, handlePasswordVisibility } =
-    useTogglePasswordVisibility();
+  useTogglePasswordVisibility();
 
   const inputOptions = {
     style: inputStyling,
@@ -28,7 +29,8 @@ const Login = ({ navigation }) => {
 
   const submitHandler = () => {
     alert("Yeah It Works");
-    
+    //TODO: will remove this in future
+    navigation.navigate("login");
   };
 
   return (
@@ -43,7 +45,7 @@ const Login = ({ navigation }) => {
           <Text style={{ fontSize: 25, alignSelf: "center", marginBottom: 10 }}>
             <SpinningTS />
           </Text>
-          <Text style={headingText}>Login</Text>
+          <Text style={headingText}>Reset Password</Text>
         </View>
         <View style={styles.container}>
           <View style={styles.inputContainer}>
@@ -51,10 +53,10 @@ const Login = ({ navigation }) => {
               style={styles.inputField}
               //   {...inputOptions}
               selectionColor={colors.color1}
-              placeholder="Email"
-              value={email}
-              onChangeText={setEmail}
-              keyboardType="email-address"
+              placeholder="OTP"
+              value={otp}
+              onChangeText={setOtp}
+              keyboardType="number-pad"
               underlineColorAndroid="transparent"
             />
           </View>
@@ -64,7 +66,7 @@ const Login = ({ navigation }) => {
               underlineStyle="none"
               style={styles.inputField}
               // {...inputOptions}
-              placeholder="Password"
+              placeholder="New Password"
               secureTextEntry={passwordVisibility}
               value={password}
               onChangeText={setPassword}
@@ -81,27 +83,22 @@ const Login = ({ navigation }) => {
               />
             </TouchableOpacity>
           </View>
-          <TouchableOpacity
-            activeOpacity={0.8}
-            onPress={() => navigation.navigate("forgotPassword")}
-          >
-            <Text style={styles.forgotPassword}>Forgot Password?</Text>
-          </TouchableOpacity>
+
           <Button
-            disabled={!email  || !password }
+            disabled={!otp || !password}
             loading={loading}
             textColor={colors.color2}
             onPress={submitHandler}
             style={styles.btn}
           >
-            LOGIN
+            Reset
           </Button>
           <Text style={styles.or}>OR</Text>
           <TouchableOpacity
             activeOpacity={0.9}
-            onPress={() => navigation.navigate("register")}
+            onPress={() => navigation.navigate("forgotPassword")}
           >
-            <Text style={styles.link}>Register</Text>
+            <Text style={styles.link}>Resend OTP</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -111,5 +108,4 @@ const Login = ({ navigation }) => {
   );
 };
 
-export default Login;
-
+export default Verification;

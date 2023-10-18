@@ -102,7 +102,7 @@ const Footer = ({ activeRoute = "home" }) => {
         <Text style={{ marginTop: -10, fontSize: 24, alignSelf: "center" }}>
           App Created By:{" "}
           <Text
-            style={{ color: "blue", fontWeight: "bold" }}
+            style={{ color: colors.color1_light2, fontWeight: "bold" }}
             onPress={() => Linking.openURL("https://qujuan.net")}
           >
             Qujuan Miller
