@@ -5,7 +5,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   colors,
   defaultImg,
@@ -20,7 +20,7 @@ import { useTogglePasswordVisibility } from "../components/TogglePassword";
 import { Avatar, Button } from "react-native-paper";
 import Footer from "../components/Footer";
 
-const Register = ({ navigation }) => {
+const Register = ({ navigation, route }) => {
   const [avatar, setAvatar] = useState("");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -53,7 +53,14 @@ const Register = ({ navigation }) => {
 
   const submitHandler = () => {
     alert("Yeah It Works");
+    navigation.navigate("verify")
   };
+
+  useEffect(() => {
+    if (route.params?.image) {
+      setAvatar(route.params.image);
+    }
+  }, [route.params, setAvatar]);
 
   return (
     <>

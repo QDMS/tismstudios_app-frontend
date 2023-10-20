@@ -71,6 +71,7 @@ export const authStyles = StyleSheet.create({
     backgroundColor: colors.color1,
     margin: 20,
     padding: 6,
+    top: -15
   },
   or: {
     alignSelf: "center",
@@ -84,6 +85,7 @@ export const authStyles = StyleSheet.create({
     color: colors.color1_light2,
     textTransform: "uppercase",
     marginVertical: 20,
+    top: -10
   },
 });
 

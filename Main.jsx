@@ -11,6 +11,18 @@ import Login from "./screens/Login";
 import Register from "./screens/Register";
 import ForgotPassword from "./screens/ForgotPassword";
 import Verification from "./screens/Verification";
+import Profile from "./screens/Profile";
+import UpdateProfile from "./screens/UpdateProfile";
+import ChangePassword from "./screens/ChangePassword";
+import Orders from "./screens/Orders";
+import AdminPanel from "./screens/Admin/AdminPanel";
+import Categories from "./screens/Admin/Categories";
+import NewService from "./screens/Admin/NewService";
+import AdminOrders from "./screens/Admin/AdminOrders";
+import UpdateService from "./screens/Admin/UpdateService";
+import ServiceImages from "./screens/Admin/ServiceImages";
+import CameraComponent from "./screens/CameraComponent"
+
 
 const Stack = createNativeStackNavigator();
 
@@ -31,12 +43,26 @@ const Main = () => {
           <Stack.Screen name="payment" component={Payments} />
           <Stack.Screen name="login" component={Login} />
           <Stack.Screen name="register" component={Register} />
+          <Stack.Screen name="profile" component={Profile} />
+          <Stack.Screen name="updateProfile" component={UpdateProfile} />
+          <Stack.Screen name="orders" component={Orders} />
+          <Stack.Screen name="camera" component={CameraComponent} />
+
           {/* Password Resetting Route */}
+          <Stack.Screen name="changePassword" component={ChangePassword} />
           <Stack.Screen name="forgotPassword" component={ForgotPassword} />
           <Stack.Screen name="verify" component={Verification} />
+
+          {/* Admin Routes */}
+          <Stack.Screen name="adminPanel" component={AdminPanel} />
+          <Stack.Screen name="categories" component={Categories} />
+          <Stack.Screen name="adminOrders" component={AdminOrders} />
+          <Stack.Screen name="newService" component={NewService} />
+          <Stack.Screen name="updateService" component={UpdateService} />
+          <Stack.Screen name="serviceImages" component={ServiceImages} />
         </Stack.Group>
       </Stack.Navigator>
-      <Toast position="bottom" bottomOffset={63}/>
+      <Toast position="bottom" bottomOffset={63} />
     </NavigationContainer>
   );
 };

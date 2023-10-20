@@ -14,8 +14,7 @@ import { Avatar, IconButton } from "react-native-paper";
 const Footer = ({ activeRoute = "home" }) => {
   const animation = useRef(new Animated.Value(0)).current;
   const [showFooter, setShowFooter] = useState(false);
-  const [isOpen, setOpen] = useState(false)
-
+  const [isOpen, setOpen] = useState(false);
 
   const navigate = useNavigation();
 
@@ -28,7 +27,7 @@ const Footer = ({ activeRoute = "home" }) => {
   };
 
   const loading = false;
-  const isAuthenticated = false;
+  const isAuthenticated = true;
 
   const navigationHandler = (key) => {
     switch (key) {
@@ -40,7 +39,7 @@ const Footer = ({ activeRoute = "home" }) => {
         break;
       case 2:
         if (isAuthenticated) navigate.navigate("profile");
-        navigate.navigate("login");
+        else navigate.navigate("login");
         break;
       default:
         navigate.navigate("home");
@@ -127,7 +126,13 @@ const Footer = ({ activeRoute = "home" }) => {
         >
           <Avatar.Icon
             {...avatarOptions}
-            icon={activeRoute === "profile" ? "account" : "account-outline"}
+            icon={
+              isAuthenticated === false
+                ? "login"
+                : activeRoute === "profile"
+                ? "account"
+                : "account-outline"
+            }
           />
         </TouchableOpacity>
         <View
