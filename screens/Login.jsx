@@ -14,39 +14,18 @@ import { Button } from "react-native-paper";
 import Footer from "../components/Footer";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../redux/actions/userActions";
-import { useEffect } from "react";
-import Toast from "react-native-toast-message";
+import { useMessageAndErrorFromUser } from "../utils/hook";
 
 const Login = ({ navigation }) => {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
 
-  const dispatch = useDispatch();
-  const { loading, message, error, isAuthenticated } = useSelector(
-    (state) => state.user
-  );
 
-  useEffect(() => {
-    if (error) {
-      Toast.show({
-        type: "error",
-        text1: error,
-      });
-      dispatch({
-        type: "clearError",
-      });
-    }
-    if (message) {
-      navigation.navigate("profile");
-      Toast.show({
-        type: "success",
-        text1: message,
-      });
-      dispatch({
-        type: "clearMessage",
-      });
-    }
-  }, [error, message, dispatch]);
+  const dispatch = useDispatch();
+  
+  const loading = useMessageAndErrorFromUser(navigation, dispatch, "profile")
+
+
 
   const { passwordVisibility, rightIcon, handlePasswordVisibility } =
     useTogglePasswordVisibility();

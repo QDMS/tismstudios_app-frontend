@@ -19,6 +19,10 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useTogglePasswordVisibility } from "../components/TogglePassword";
 import { Avatar, Button } from "react-native-paper";
 import Footer from "../components/Footer";
+import mime from "mime";
+import { useDispatch } from "react-redux";
+import { registration } from "../redux/actions/userActions";
+import { useMessageAndErrorFromUser } from "../utils/hook";
 
 const Register = ({ navigation, route }) => {
   const [avatar, setAvatar] = useState("");
@@ -39,7 +43,7 @@ const Register = ({ navigation, route }) => {
     activeOutlineColor: colors.color1,
   };
 
-  const loading = false;
+  const dispatch = useDispatch();
 
   const disableBtn =
     !name ||
@@ -52,9 +56,29 @@ const Register = ({ navigation, route }) => {
     !zipCode;
 
   const submitHandler = () => {
-    alert("Yeah It Works");
-    navigation.navigate("verify")
+    const myForm = new FormData();
+
+    myForm.append("name", name);
+    myForm.append("email", email);
+    myForm.append("password", password);
+    myForm.append("phone", phone);
+    myForm.append("address", address);
+    myForm.append("city", city);
+    myForm.append("usState", usState);
+    myForm.append("zipCode", zipCode);
+
+    if (avatar !== "") {
+      myForm.append("file", {
+        uri: avatar,
+        type: mime.getType(avatar),
+        name: avatar.split("/").pop(),
+      });
+    }
+
+    dispatch(registration(myForm));
   };
+
+  const loading = useMessageAndErrorFromUser(navigation, dispatch, "profile");
 
   useEffect(() => {
     if (route.params?.image) {

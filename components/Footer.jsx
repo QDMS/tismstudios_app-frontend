@@ -10,6 +10,7 @@ import {
 import { colors } from "../styles/styles";
 import { useNavigation } from "@react-navigation/native";
 import { Avatar, IconButton } from "react-native-paper";
+import { useSelector } from "react-redux";
 
 const Footer = ({ activeRoute = "home" }) => {
   const animation = useRef(new Animated.Value(0)).current;
@@ -26,8 +27,7 @@ const Footer = ({ activeRoute = "home" }) => {
     size: 50,
   };
 
-  const loading = false;
-  const isAuthenticated = false;
+  const { loading, isAuthenticated } = useSelector((state) => state.user);
 
   const navigationHandler = (key) => {
     switch (key) {
@@ -73,108 +73,112 @@ const Footer = ({ activeRoute = "home" }) => {
   };
 
   return (
-    <View
-      style={{
-        height: 90,
-        backgroundColor: colors.color2,
-      }}
-    >
-      {/* Main content here */}
+    loading === false && (
       <View
         style={{
-          flexDirection: "column",
-          justifyContent: "space-evenly",
-          alignItems: "flex-start",
+          height: 90,
+          backgroundColor: colors.color2,
         }}
       >
-        <TouchableOpacity onPress={toggleFooter}>
-          <View style={{ bottom: 25 }}>
-            <Avatar.Icon
-              icon={showFooter ? "chevron-right-circle" : "chevron-left-circle"}
-              color={colors.color1}
-              style={{ backgroundColor: colors.color4 }}
-            />
-          </View>
-
-          {/* <Text style={{ paddingHorizontal: 30 }}>Press Here</Text> */}
-        </TouchableOpacity>
-        <Text style={{ marginTop: -10, fontSize: 24, alignSelf: "center" }}>
-          App Created By:{" "}
-          <Text
-            style={{ color: colors.color1_light2, fontWeight: "bold" }}
-            onPress={() => Linking.openURL("https://qujuan.net")}
-          >
-            Qujuan Miller
-          </Text>
-        </Text>
-      </View>
-
-      <Animated.View style={[styles.footer, footerStyle]}>
-        {/* Footer content */}
-        <TouchableOpacity
-          activeOpacity={0.8}
-          onPress={() => navigationHandler(1)}
-        >
-          <Avatar.Icon
-            {...avatarOptions}
-            icon={activeRoute === "cart" ? "shopping" : "shopping-outline"}
-          />
-        </TouchableOpacity>
-        <TouchableOpacity
-          activeOpacity={0.8}
-          onPress={() => navigationHandler(2)}
-        >
-          <Avatar.Icon
-            {...avatarOptions}
-            icon={
-              isAuthenticated === false
-                ? "login"
-                : activeRoute === "profile"
-                ? "account"
-                : "account-outline"
-            }
-          />
-        </TouchableOpacity>
+        {/* Main content here */}
         <View
           style={{
-            position: "absolute",
-            width: 80,
-            height: 80,
-            backgroundColor: colors.color2,
-            borderRadius: 100,
-            justifyContent: "center",
-            alignItems: "center",
-            alignContent: "center",
-            top: -50,
-            right: 165,
-            left: 165,
-            alignSelf: "center",
+            flexDirection: "column",
+            justifyContent: "space-evenly",
+            alignItems: "flex-start",
           }}
         >
+          <TouchableOpacity onPress={toggleFooter}>
+            <View style={{ bottom: 25 }}>
+              <Avatar.Icon
+                icon={
+                  showFooter ? "chevron-right-circle" : "chevron-left-circle"
+                }
+                color={colors.color1}
+                style={{ backgroundColor: colors.color4 }}
+              />
+            </View>
+
+            {/* <Text style={{ paddingHorizontal: 30 }}>Press Here</Text> */}
+          </TouchableOpacity>
+          <Text style={{ marginTop: -10, fontSize: 24, alignSelf: "center" }}>
+            App Created By:{" "}
+            <Text
+              style={{ color: colors.color1_light2, fontWeight: "bold" }}
+              onPress={() => Linking.openURL("https://qujuan.net")}
+            >
+              Qujuan Miller
+            </Text>
+          </Text>
+        </View>
+
+        <Animated.View style={[styles.footer, footerStyle]}>
+          {/* Footer content */}
+          <TouchableOpacity
+            activeOpacity={0.8}
+            onPress={() => navigationHandler(1)}
+          >
+            <Avatar.Icon
+              {...avatarOptions}
+              icon={activeRoute === "cart" ? "shopping" : "shopping-outline"}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity
+            activeOpacity={0.8}
+            onPress={() => navigationHandler(2)}
+          >
+            <Avatar.Icon
+              {...avatarOptions}
+              icon={
+                isAuthenticated === false
+                  ? "login"
+                  : activeRoute === "profile"
+                  ? "account"
+                  : "account-outline"
+              }
+            />
+          </TouchableOpacity>
           <View
             style={{
+              position: "absolute",
+              width: 80,
+              height: 80,
+              backgroundColor: colors.color2,
               borderRadius: 100,
               justifyContent: "center",
               alignItems: "center",
+              alignContent: "center",
+              top: -50,
+              right: 165,
+              left: 165,
+              alignSelf: "center",
             }}
           >
-            <TouchableOpacity
-              activeOpacity={0.8}
-              onPress={() => navigationHandler(0)}
+            <View
+              style={{
+                borderRadius: 100,
+                justifyContent: "center",
+                alignItems: "center",
+              }}
             >
-              <Avatar.Icon
-                color={colors.color2}
-                style={{
-                  backgroundColor: colors.color1,
-                }}
-                size={50}
-                icon={activeRoute === "home" ? "home" : "home-outline"}
-              />
-            </TouchableOpacity>
+              <TouchableOpacity
+                activeOpacity={0.8}
+                onPress={() => navigationHandler(0)}
+              >
+                <Avatar.Icon
+                  color={colors.color2}
+                  style={{
+                    backgroundColor: colors.color1,
+                  }}
+                  size={50}
+                  icon={activeRoute === "home" ? "home" : "home-outline"}
+                />
+              </TouchableOpacity>
+            </View>
           </View>
-        </View>
-      </Animated.View>
-    </View>
+        </Animated.View>
+      </View>
+    )
   );
 };
 

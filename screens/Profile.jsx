@@ -6,18 +6,24 @@ import { Avatar, Button } from "react-native-paper";
 import ButtonBox from "../components/ButtonBox";
 import Footer from "../components/Footer";
 import RotatingStarLoader from "../components/RotatingStarLoader";
+import { useDispatch } from "react-redux";
+import { logout } from "../redux/actions/userActions";
+import { useMessageAndErrorFromUser } from "../utils/hook";
 
 const user = {
   name: "Qujuan Miller",
   email: "qujuanmiller@gmail.com",
 };
 
-const loading = false;
-
 const Profile = ({ navigation, route }) => {
   const [avatar, setAvatar] = useState(null);
+
+  const dispatch = useDispatch();
+
+  const loading = useMessageAndErrorFromUser(navigation, dispatch, "login")
+
   const logoutHandler = () => {
-    console.log("Logging Out...");
+    dispatch(logout());
   };
   const navigateHandler = (text) => {
     switch (text) {

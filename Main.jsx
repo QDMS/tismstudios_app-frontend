@@ -21,12 +21,20 @@ import NewService from "./screens/Admin/NewService";
 import AdminOrders from "./screens/Admin/AdminOrders";
 import UpdateService from "./screens/Admin/UpdateService";
 import ServiceImages from "./screens/Admin/ServiceImages";
-import CameraComponent from "./screens/CameraComponent"
-
+import CameraComponent from "./screens/CameraComponent";
+import { useDispatch } from "react-redux";
+import { useEffect } from "react";
+import { loadUser } from "./redux/actions/userActions";
 
 const Stack = createNativeStackNavigator();
 
 const Main = () => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(loadUser());
+  }, [dispatch]);
+
   return (
     <NavigationContainer>
       <Stack.Navigator
