@@ -1,20 +1,52 @@
-import {
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { Text, TextInput, TouchableOpacity, View } from "react-native";
 import React, { useState } from "react";
-import { colors, defaultStyles, headingText, inputStyling, authStyles as styles } from "../styles/styles";
+import {
+  colors,
+  defaultStyles,
+  headingText,
+  inputStyling,
+  authStyles as styles,
+} from "../styles/styles";
 import SpinningTS from "../components/SpinningTS";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useTogglePasswordVisibility } from "../components/TogglePassword";
 import { Button } from "react-native-paper";
 import Footer from "../components/Footer";
+import { useDispatch, useSelector } from "react-redux";
+import { login } from "../redux/actions/userActions";
+import { useEffect } from "react";
+import Toast from "react-native-toast-message";
 
 const Login = ({ navigation }) => {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
+
+  const dispatch = useDispatch();
+  const { loading, message, error, isAuthenticated } = useSelector(
+    (state) => state.user
+  );
+
+  useEffect(() => {
+    if (error) {
+      Toast.show({
+        type: "error",
+        text1: error,
+      });
+      dispatch({
+        type: "clearError",
+      });
+    }
+    if (message) {
+      navigation.navigate("profile");
+      Toast.show({
+        type: "success",
+        text1: message,
+      });
+      dispatch({
+        type: "clearMessage",
+      });
+    }
+  }, [error, message, dispatch]);
 
   const { passwordVisibility, rightIcon, handlePasswordVisibility } =
     useTogglePasswordVisibility();
@@ -24,11 +56,9 @@ const Login = ({ navigation }) => {
     activeOutlineColor: colors.color1,
   };
 
-  const loading = false;
-
   const submitHandler = () => {
-    alert("Yeah It Works");
-    
+    alert("All Prices For Services Are Not Final And Is Only A Deposit");
+    dispatch(login(email, password));
   };
 
   return (
@@ -88,7 +118,7 @@ const Login = ({ navigation }) => {
             <Text style={styles.forgotPassword}>Forgot Password?</Text>
           </TouchableOpacity>
           <Button
-            disabled={!email  || !password }
+            disabled={!email || !password}
             loading={loading}
             textColor={colors.color2}
             onPress={submitHandler}
@@ -112,4 +142,3 @@ const Login = ({ navigation }) => {
 };
 
 export default Login;
-
