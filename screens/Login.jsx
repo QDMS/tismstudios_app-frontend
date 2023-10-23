@@ -14,7 +14,7 @@ import { Button } from "react-native-paper";
 import Footer from "../components/Footer";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../redux/actions/userActions";
-import { useMessageAndErrorFromUser } from "../utils/hook";
+import { useMessageAndErrorFromUser } from "../utils/hooks";
 
 const Login = ({ navigation }) => {
   const [email, setEmail] = useState();

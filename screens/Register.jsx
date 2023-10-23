@@ -22,7 +22,7 @@ import Footer from "../components/Footer";
 import mime from "mime";
 import { useDispatch } from "react-redux";
 import { registration } from "../redux/actions/userActions";
-import { useMessageAndErrorFromUser } from "../utils/hook";
+import { useMessageAndErrorFromUser } from "../utils/hooks";
 
 const Register = ({ navigation, route }) => {
   const [avatar, setAvatar] = useState("");

@@ -1,14 +1,6 @@
 import { createReducer } from "@reduxjs/toolkit";
 
-const initialState = {
-  user: null, // Initial user state
-  loading: false,
-  isAuthenticated: false,
-  error: null,
-  message: null,
-};
-
-export const userReducer = createReducer(initialState, (builder) => {
+export const userReducer = createReducer({}, (builder) => {
   builder
     .addCase("loginRequest", (state) => {
       state.loading = true;

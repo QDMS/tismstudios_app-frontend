@@ -12,15 +12,16 @@ import ButtonBox from "../components/ButtonBox";
 import Footer from "../components/Footer";
 import RotatingStarLoader from "../components/RotatingStarLoader";
 import { useDispatch, useSelector } from "react-redux";
-import { logout } from "../redux/actions/userActions";
-import { useMessageAndErrorFromUser } from "../utils/hook";
+import { loadUser, logout } from "../redux/actions/userActions";
+import { useMessageAndErrorFromUser } from "../utils/hooks";
 
 const Profile = ({ navigation, route }) => {
   const { user } = useSelector((state) => state.user);
 
   const [avatar, setAvatar] = useState(
-    user?.avatar ? user.avatar.url : defaultImg
+    user?.avatar ? user?.avatar.url : defaultImg
   );
+
 
   const dispatch = useDispatch();
 
@@ -59,8 +60,21 @@ const Profile = ({ navigation, route }) => {
     if (route.params?.image) {
       setAvatar(route.params.image);
       // dispatch updatePic Here
+      const myForm = new FormData();
+      myForm.append("file", {
+        uri: route.params.image,
+        type: mime.getType(route.params.image),
+        name: route.params.image.split("/").pop(),
+      });
     }
-  }, [route.params, setAvatar]);
+    dispatch(loadUser());
+  }, [route.params, dispatch]);
+
+  useEffect(() => {
+    if (user?.avatar) {
+      setAvatar(user.avatar.url);
+    }
+  }, [user]);
 
   return (
     <>
