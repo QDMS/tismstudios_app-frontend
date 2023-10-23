@@ -9,27 +9,34 @@ import {
 } from "../styles/styles";
 import SpinningTS from "../components/SpinningTS";
 import { Button } from "react-native-paper";
-import Footer from "../components/Footer";
 import Header from "../components/Header";
+import { useDispatch, useSelector } from "react-redux";
+import { updateProfile } from "../redux/actions/otherActions";
+import { useMessageAndErrorFromOther } from "../utils/hooks";
 
 const UpdateProfile = ({ navigation }) => {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
-  const [address, setAddress] = useState("");
-  const [city, setCity] = useState("");
-  const [usState, setUsState] = useState("");
-  const [zipCode, setZipCode] = useState("");
+  const { user } = useSelector((state) => state.user);
+  const [name, setName] = useState(user?.name);
+  const [email, setEmail] = useState(user?.email);
+  const [phone, setPhone] = useState(user?.phone.toString());
+  const [address, setAddress] = useState(user?.address);
+  const [city, setCity] = useState(user?.city);
+  const [usState, setUsState] = useState(user?.usState);
+  const [zipCode, setZipCode] = useState(user?.zipCode.toString());
+
+  const dispatch = useDispatch();
 
   const inputOptions = {
     style: inputStyling,
     activeOutlineColor: colors.color1,
   };
 
-  const loading = false;
+  const loading = useMessageAndErrorFromOther(dispatch, navigation, "profile");
 
   const submitHandler = () => {
-    alert("Yeah It Works");
+    dispatch(
+      updateProfile(name, email, phone, address, city, usState, zipCode)
+    );
   };
 
   return (

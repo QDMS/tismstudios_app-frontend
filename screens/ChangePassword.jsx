@@ -12,8 +12,11 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useTogglePasswordVisibility } from "../components/TogglePassword";
 import { Button } from "react-native-paper";
 import Header from "../components/Header";
+import { useDispatch } from "react-redux";
+import { updatePassword } from "../redux/actions/otherActions";
+import { useMessageAndErrorFromOther } from "../utils/hooks";
 
-const ChangePassword = ({ navigation }) => {
+const ChangePassword = () => {
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
 
@@ -25,10 +28,14 @@ const ChangePassword = ({ navigation }) => {
     activeOutlineColor: colors.color1,
   };
 
-  const loading = false;
+  const dispatch = useDispatch();
+
+  const loading = useMessageAndErrorFromOther(dispatch);
 
   const submitHandler = () => {
-    alert("Yeah It Works");
+    dispatch(updatePassword(oldPassword, newPassword));
+    setOldPassword("");
+    setNewPassword("");
   };
 
   return (

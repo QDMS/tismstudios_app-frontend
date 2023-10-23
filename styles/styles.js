@@ -56,7 +56,7 @@ export const authStyles = StyleSheet.create({
   },
   inputField: {
     padding: 14,
-    fontSize: 22,
+    fontSize: 20,
     width: "100%",
     backgroundColor: colors.color2,
     color: colors.color1,

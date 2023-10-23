@@ -30,9 +30,7 @@ const Stack = createNativeStackNavigator();
 
 const Main = () => {
   const dispatch = useDispatch();
-  const {user } = useSelector(state=> state.user)
 
-  console.log(user);
   useEffect(() => {
     dispatch(loadUser());
   }, [dispatch]);
@@ -72,7 +70,7 @@ const Main = () => {
           <Stack.Screen name="serviceImages" component={ServiceImages} />
         </Stack.Group>
       </Stack.Navigator>
-      <Toast position="bottom" bottomOffset={63} />
+      <Toast position="top" topOffset={63} />
     </NavigationContainer>
   );
 };

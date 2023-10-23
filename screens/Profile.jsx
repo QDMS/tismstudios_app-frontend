@@ -11,19 +11,25 @@ import { Avatar, Button } from "react-native-paper";
 import ButtonBox from "../components/ButtonBox";
 import Footer from "../components/Footer";
 import RotatingStarLoader from "../components/RotatingStarLoader";
+import { getType } from 'mime';
 import { useDispatch, useSelector } from "react-redux";
 import { loadUser, logout } from "../redux/actions/userActions";
-import { useMessageAndErrorFromUser } from "../utils/hooks";
+import {
+  useMessageAndErrorFromOther,
+  useMessageAndErrorFromUser,
+} from "../utils/hooks";
+import { useIsFocused } from "@react-navigation/native";
+import { updatePic } from "../redux/actions/otherActions";
 
 const Profile = ({ navigation, route }) => {
+  const dispatch = useDispatch();
   const { user } = useSelector((state) => state.user);
 
   const [avatar, setAvatar] = useState(
-    user?.avatar ? user?.avatar.url : defaultImg
+    user?.avatar ? user.avatar.url : defaultImg
   );
 
-
-  const dispatch = useDispatch();
+  const isFocused = useIsFocused();
 
   const loading = useMessageAndErrorFromUser(navigation, dispatch, "login");
 
@@ -54,27 +60,41 @@ const Profile = ({ navigation, route }) => {
         break;
     }
   };
-  const shiningStarRef = useRef();
+
+  const loadingPic = useMessageAndErrorFromOther(
+    dispatch,
+    null,
+    null,
+    loadUser
+  );
 
   useEffect(() => {
     if (route.params?.image) {
+      // Update the avatar state
       setAvatar(route.params.image);
-      // dispatch updatePic Here
+      console.log(route.params.image);
+  
+      // Create a FormData object and append the image data
       const myForm = new FormData();
       myForm.append("file", {
         uri: route.params.image,
-        type: mime.getType(route.params.image),
+        type: getType(route.params.image),
         name: route.params.image.split("/").pop(),
       });
+  
+      // Dispatch the updatePic action with the FormData
+      dispatch(updatePic(myForm));
     }
+  
+    // Dispatch the loadUser action
     dispatch(loadUser());
-  }, [route.params, dispatch]);
+  }, [route.params, dispatch, isFocused]);
 
-  useEffect(() => {
-    if (user?.avatar) {
-      setAvatar(user.avatar.url);
-    }
-  }, [user]);
+  // useEffect(() => {
+  //   if (user?.avatar) {
+  //     setAvatar(user.avatar.url);
+  //   }
+  // }, [user]);
 
   return (
     <>
@@ -106,11 +126,18 @@ const Profile = ({ navigation, route }) => {
               />
 
               <TouchableOpacity
+                disabled={loadingPic}
                 onPress={() =>
                   navigation.navigate("camera", { updateProfile: true })
                 }
               >
-                <Button textColor={colors.color1_light2}>Change Photo</Button>
+                <Button
+                  disabled={loadingPic}
+                  loading={loadingPic}
+                  textColor={colors.color1_light2}
+                >
+                  Change Photo
+                </Button>
               </TouchableOpacity>
 
               <Text style={styles.name}>{user?.name}</Text>
