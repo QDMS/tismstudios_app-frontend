@@ -1,10 +1,10 @@
 import axios from "axios";
 import { server } from "../store";
 
-export const register = (formData) => async (dispatch) => {
+export const registration = (formData) => async (dispatch) => {
   try {
     dispatch({
-      type: "registerRequest",
+      type: "registrationRequest",
     });
 
     const { data } = await axios.post(`${server}/user/new`, formData, {
@@ -15,12 +15,12 @@ export const register = (formData) => async (dispatch) => {
     });
 
     dispatch({
-      type: "registerSuccess",
+      type: "registrationSuccess",
       payload: data.message,
     });
   } catch (error) {
     dispatch({
-      type: "registerFail",
+      type: "registrationFail",
       payload: error.response.data.message,
     });
   }
