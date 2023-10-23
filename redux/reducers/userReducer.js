@@ -1,6 +1,14 @@
 import { createReducer } from "@reduxjs/toolkit";
 
-export const userReducer = createReducer({}, (builder) => {
+const initialState = {
+  user: null, // Initial user state
+  loading: false,
+  isAuthenticated: false,
+  error: null,
+  message: null,
+};
+
+export const userReducer = createReducer(initialState, (builder) => {
   builder
     .addCase("loginRequest", (state) => {
       state.loading = true;
@@ -11,7 +19,7 @@ export const userReducer = createReducer({}, (builder) => {
     .addCase("logoutRequest", (state) => {
       state.loading = true;
     })
-    .addCase("registrationRequest", (state) => {
+    .addCase("registerRequest", (state) => {
       state.loading = true;
     });
   builder
@@ -31,37 +39,37 @@ export const userReducer = createReducer({}, (builder) => {
       state.message = action.payload;
       state.user = null;
     })
-    .addCase("registrationSuccess", (state, action) => {
+    .addCase("registerSuccess", (state, action) => {
       state.loading = false;
       state.isAuthenticated = true;
       state.message = action.payload;
     });
   builder
-    .addCase("loginFailed", (state, action) => {
+    .addCase("loginFail", (state, action) => {
       state.loading = false;
       state.isAuthenticated = false;
       state.error = action.payload;
     })
-    .addCase("loadUserFailed", (state, action) => {
+    .addCase("loadUserFail", (state, action) => {
       state.loading = false;
       state.isAuthenticated = false;
       state.error = action.payload;
     })
-    .addCase("logoutFailed", (state, action) => {
+    .addCase("logoutFail", (state, action) => {
       state.loading = false;
       state.isAuthenticated = true;
       state.error = action.payload;
     })
-    .addCase("registrationFailed", (state, action) => {
+    .addCase("registerFail", (state, action) => {
       state.loading = false;
       state.isAuthenticated = false;
       state.error = action.payload;
     });
 
-  builder.addCase("clearError", (state, action) => {
+  builder.addCase("clearError", (state) => {
     state.error = null;
   });
-  builder.addCase("clearMessage", (state, action) => {
+  builder.addCase("clearMessage", (state) => {
     state.message = null;
   });
 });

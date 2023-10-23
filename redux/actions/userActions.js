@@ -1,31 +1,26 @@
 import axios from "axios";
 import { server } from "../store";
 
-export const registration = (formData) => async (dispatch) => {
+export const register = (formData) => async (dispatch) => {
   try {
     dispatch({
-      type: "registrationRequest",
+      type: "registerRequest",
     });
 
-    const { data } = await axios.post(
-      `${server}/user/new`,
-
-      formData,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-        withCredentials: true,
-      }
-    );
+    const { data } = await axios.post(`${server}/user/new`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      withCredentials: true,
+    });
 
     dispatch({
-      type: "registrationSuccess",
+      type: "registerSuccess",
       payload: data.message,
     });
   } catch (error) {
     dispatch({
-      type: "registrationFailed",
+      type: "registerFail",
       payload: error.response.data.message,
     });
   }
@@ -37,7 +32,8 @@ export const login = (email, password) => async (dispatch) => {
       type: "loginRequest",
     });
 
-    // Axios here
+    //    Axios here
+
     const { data } = await axios.post(
       `${server}/user/login`,
       {
@@ -58,7 +54,7 @@ export const login = (email, password) => async (dispatch) => {
     });
   } catch (error) {
     dispatch({
-      type: "loginFailed",
+      type: "loginFail",
       payload: error.response.data.message,
     });
   }
@@ -69,7 +65,6 @@ export const loadUser = () => async (dispatch) => {
     dispatch({
       type: "loadUserRequest",
     });
-
     const { data } = await axios.get(`${server}/user/me`, {
       withCredentials: true,
     });
@@ -80,7 +75,7 @@ export const loadUser = () => async (dispatch) => {
     });
   } catch (error) {
     dispatch({
-      type: "loadUserFailed",
+      type: "loadUserFail",
       payload: error.response.data.message,
     });
   }
@@ -91,7 +86,6 @@ export const logout = () => async (dispatch) => {
     dispatch({
       type: "logoutRequest",
     });
-
     const { data } = await axios.get(`${server}/user/logout`, {
       withCredentials: true,
     });
@@ -102,7 +96,7 @@ export const logout = () => async (dispatch) => {
     });
   } catch (error) {
     dispatch({
-      type: "logoutFailed",
+      type: "logoutFail",
       payload: error.response.data.message,
     });
   }

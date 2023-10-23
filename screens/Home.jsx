@@ -37,15 +37,15 @@ export const services = [
     ],
   },
   {
-    price: 4000,
-    toc: " 3 months",
-    name: "E-commerce Mobile App",
-    _id: "E-commerce Mobile App",
+    price: 60,
+    etoc: "45 mins",
+    name: "Iphone 7 Screen Repair",
+    _id: "Iphone 7 Screen Repair",
     stock: 2,
-    category: "Mobile App Development",
+    category: "Phone Repair",
     images: [
       {
-        url: "https://idapgroup.com/blog/blog/wp-content/uploads/2020/12/image1.png",
+        url: "https://www.twinstiarasandtantrums.com/wp-content/uploads/2022/05/smashed_iphone_c249ecb5-533c-4da2-85bf-85cb758592f7-v1623249323723.png",
       },
     ],
   },

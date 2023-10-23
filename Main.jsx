@@ -22,7 +22,7 @@ import AdminOrders from "./screens/Admin/AdminOrders";
 import UpdateService from "./screens/Admin/UpdateService";
 import ServiceImages from "./screens/Admin/ServiceImages";
 import CameraComponent from "./screens/CameraComponent";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { loadUser } from "./redux/actions/userActions";
 
@@ -30,7 +30,9 @@ const Stack = createNativeStackNavigator();
 
 const Main = () => {
   const dispatch = useDispatch();
+  const {user } = useSelector(state=> state.user)
 
+  console.log(user);
   useEffect(() => {
     dispatch(loadUser());
   }, [dispatch]);
