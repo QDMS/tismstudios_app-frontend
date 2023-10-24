@@ -13,6 +13,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllServices } from "../redux/actions/serviceAction";
 import { useSetCategories } from "../utils/hooks";
+import Toast from "react-native-toast-message";
 
 const Home = () => {
   const [category, setCategory] = useState("");
@@ -31,8 +32,27 @@ const Home = () => {
     setCategory(id);
   };
 
-  const addToCartHandler = (id) => {
-    console.log("Add To Cart", id);
+  const addToCartHandler = (id, name, price, image, etoc, stock) => {
+    if (stock === 0) return Toast.show({
+      type: "error",
+      text1: "Out Of Stock"
+    });
+    dispatch({
+      type: "addToCart",
+      payload: {
+        service: id,
+        name,
+        price,
+        image,
+        etoc,
+        stock,
+        quantity: 1,
+      },
+    });
+    Toast.show({
+      type: "success",
+      text1: "Add To Cart"
+    });
   };
 
   useSetCategories(setCategories, isFocused);
@@ -86,7 +106,7 @@ const Home = () => {
           <View style={{ flexDirection: "row" }}>
             {/* <View style={{ flexDirection: "column" }}>
             <Text style={{ fontSize: 25, alignSelf: "center"  }}><SpinningTS/></Text>
-            <Text style={{ fontSize: 20, fontWeight: "900" }}>Products</Text>
+            <Text style={{ fontSize: 20, fontWeight: "900" }}>services</Text>
           </View> */}
             <View style={{ flexDirection: "column", paddingHorizontal: 75 }}>
               <Text style={{ fontSize: 25, alignSelf: "center" }}>

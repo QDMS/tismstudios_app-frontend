@@ -13,37 +13,53 @@ import { Button } from "react-native-paper";
 import CartItem from "../components/CartItem";
 import { useNavigation } from "@react-navigation/native";
 import Heading from "../components/Heading";
-
-export const cartItems = [
-  {
-    name: "Iphone 12 Screen Repair",
-    image:
-      "https://www.twinstiarasandtantrums.com/wp-content/uploads/2022/05/smashed_iphone_c249ecb5-533c-4da2-85bf-85cb758592f7-v1623249323723.png",
-    service: "Iphone 12 Screen Repair",
-    stock: 3,
-    price: 100,
-    quantity: 2,
-  },
-  {
-    name: "E-commerce Mobile App",
-    image:
-      "https://idapgroup.com/blog/blog/wp-content/uploads/2020/12/image1.png",
-    service: "E-commerce Mobile App",
-    stock: 99,
-    price: 4000,
-    quantity: 1,
-  },
-];
+import { useDispatch, useSelector } from "react-redux";
+import Toast from "react-native-toast-message";
 
 const Cart = () => {
   const navigate = useNavigation();
+  const dispatch = useDispatch();
 
-  const incrementHandler = (id, qty, stock) => {
-    console.log("Increasing", id, qty, stock);
+  const { cartItems } = useSelector((state) => state.cart);
+
+  const incrementHandler = (id, name, price, image, etoc, stock, quantity) => {
+    const newQty = quantity + 1;
+    if (stock <= quantity)
+      return Toast.show({
+        type: "error",
+        text1: "Maximum Value Entered",
+      });
+    dispatch({
+      type: "addToCart",
+      payload: {
+        service: id,
+        name,
+        price,
+        image,
+        etoc,
+        stock,
+        quantity: newQty,
+      },
+    });
   };
 
-  const decrementHandler = (id, qty) => {
-    console.log("decreasing", id, qty);
+  const decrementHandler = (id, name, price, image, etoc, stock, quantity) => {
+    const newQty = quantity - 1;
+
+    if (1 >= quantity) return dispatch({ type: "removeFromCart", payload: id });
+
+    dispatch({
+      type: "addToCart",
+      payload: {
+        service: id,
+        name,
+        price,
+        image,
+        etoc,
+        stock,
+        quantity: newQty,
+      },
+    });
   };
 
   return (
@@ -59,21 +75,34 @@ const Cart = () => {
         }}
       >
         <ScrollView showsVerticalScrollIndicator={false}>
-          {cartItems.map((i, index) => (
-            <CartItem
-              navigate={navigate}
-              key={i.service}
-              id={i.service}
-              name={i.name}
-              stock={i.stock}
-              amount={i.price}
-              imgSrc={i.image}
-              index={index}
-              qty={i.quantity}
-              incrementHandler={incrementHandler}
-              decrementHandler={decrementHandler}
-            />
-          ))}
+          {cartItems.length > 0 ? (
+            cartItems.map((i, index) => (
+              <CartItem
+                navigate={navigate}
+                key={i.service}
+                id={i.service}
+                name={i.name}
+                stock={i.stock}
+                etoc={i.etoc}
+                amount={i.price}
+                imgSrc={i.image}
+                index={index}
+                qty={i.quantity}
+                incrementHandler={incrementHandler}
+                decrementHandler={decrementHandler}
+              />
+            ))
+          ) : (
+            <Text
+              style={{
+                textAlign: "center",
+                fontSize: 30,
+              }}
+            >
+              {" "}
+              No Items In Cart
+            </Text>
+          )}
         </ScrollView>
       </View>
       <View
@@ -83,8 +112,13 @@ const Cart = () => {
           paddingHorizontal: 35,
         }}
       >
-        <Text>5 Items</Text>
-        <Text>$5</Text>
+        <Text>{cartItems.length} Item/s</Text>
+        <Text>
+          {cartItems.reduce(
+            (prev, curr) => prev + curr.quantity * curr.price,
+            0
+          )}
+        </Text>
       </View>
 
       <TouchableOpacity

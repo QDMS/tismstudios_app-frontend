@@ -21,8 +21,8 @@ const ServiceCard = ({
     >
       <View
         style={{
-          elevation: 5,
-          width: 200,
+          elevation: 15,
+          width: 250,
           alignItems: "center",
           justifyContent: "space-between",
           margin: 20,
@@ -62,13 +62,20 @@ const ServiceCard = ({
                 color: i % 2 === 0 ? colors.color2 : colors.color3,
                 fontSize: 18,
                 fontWeight: 300,
-                maxWidth: 100,
+                width: "60%",
               }}
             >
               {name}
             </Text>
           </View>
-          <View style={{ flexDirection: "column", alignContent: "center", alignItems: "center", alignSelf: "center" }}>
+          <View
+            style={{
+              flexDirection: "column",
+              alignContent: "center",
+              alignItems: "center",
+              alignSelf: "center",
+            }}
+          >
             <Text
               numberOfLines={1}
               style={{
@@ -84,7 +91,7 @@ const ServiceCard = ({
               style={{
                 fontSize: 10,
                 color: i % 2 === 0 ? colors.color2 : colors.color3,
-                   alignSelf: "center",
+                alignSelf: "center",
               }}
             >
               (ETOC)
@@ -99,19 +106,24 @@ const ServiceCard = ({
             >
               {etoc}
             </Text>
-            
           </View>
         </View>
         <TouchableOpacity
+          hitSlop={{ x: 25, y: 15 }}
           style={{
             backgroundColor: i % 2 === 0 ? colors.color2 : colors.color3,
             borderRadius: 0,
+            paddingVertical:5,
             borderBottomRightRadius: 20,
             borderBottomLeftRadius: 20,
             width: "100%",
           }}
         >
-          <Button onPress={() => addToCartHandler(id)}>
+          <Button
+            onPress={() =>
+              addToCartHandler(id, name, price, image, etoc, stock)
+            }
+          >
             <Text
               style={{ color: i % 2 === 0 ? colors.color1 : colors.color2 }}
             >

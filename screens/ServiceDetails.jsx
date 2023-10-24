@@ -42,18 +42,33 @@ const ServiceDetails = ({ route: { params } }) => {
     setQuantity((prev) => prev - 1);
   };
 
-  addToCartHandler = () => {
+  const addToCartHandler = () => {
     if (stock === 0)
       return Toast.show({
         type: "error",
         text1: "Out Of Stock",
       });
-    Toast.show({ type: "success", text1: "Added To Cart" });
+    dispatch({
+      type: "addToCart",
+      payload: {
+        service: params.id,
+        name,
+        price,
+        image: images[0]?.url,
+        stock,
+        quantity,
+        etoc,
+      },
+    });
+    Toast.show({
+      type: "success",
+      text1: "Add To Cart",
+    });
   };
 
   useEffect(() => {
     dispatch(getServiceDetails(params.id));
-  }, [dispatch, isFocused]);
+  }, [dispatch, params.id, isFocused]);
 
   return (
     <View
