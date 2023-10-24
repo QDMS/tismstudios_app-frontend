@@ -26,7 +26,7 @@ const Profile = ({ navigation, route }) => {
   const { user } = useSelector((state) => state.user);
 
   const [avatar, setAvatar] = useState(
-    user?.avatar ? user.avatar.url : defaultImg
+     defaultImg
   );
 
   const isFocused = useIsFocused();
@@ -72,7 +72,6 @@ const Profile = ({ navigation, route }) => {
     if (route.params?.image) {
       // Update the avatar state
       setAvatar(route.params.image);
-      console.log(route.params.image);
   
       // Create a FormData object and append the image data
       const myForm = new FormData();
@@ -90,11 +89,11 @@ const Profile = ({ navigation, route }) => {
     dispatch(loadUser());
   }, [route.params, dispatch, isFocused]);
 
-  // useEffect(() => {
-  //   if (user?.avatar) {
-  //     setAvatar(user.avatar.url);
-  //   }
-  // }, [user]);
+  useEffect(() => {
+    if (user?.avatar) {
+      setAvatar(user.avatar.url);
+    }
+  }, [user]);
 
   return (
     <>

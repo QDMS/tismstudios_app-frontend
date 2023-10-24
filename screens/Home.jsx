@@ -7,56 +7,25 @@ import { Avatar, Button } from "react-native-paper";
 import SpinningTS from "../components/SpinningTS";
 import SearchModel from "../components/SearchModel";
 import ServiceCard from "../components/ServiceCard";
-import { useNavigation } from "@react-navigation/native";
+import { useIsFocused, useNavigation } from "@react-navigation/native";
 import Footer from "../components/Footer";
-
-const categories = [
-  { category: "Tablet Repair", _id: "Tablet Repair" },
-  { category: "Software Consultant", _id: "Software Consultant" },
-  { category: "Pet Cams", _id: "Pet Cams" },
-  { category: "Phone Repair", _id: "Phone Repair" },
-  { category: "Web Development", _id: "Web Development" },
-  { category: "Mobile App Development", _id: "Mobile App Development" },
-  { category: "Game Development", _id: "Game Development" },
-  { category: "Computer Repair", _id: "Computer Repair" },
-  { category: "Graphics Design", _id: "Graphics Design" },
-];
-
-export const services = [
-  {
-    price: 100,
-    etoc: "1 hour",
-    name: "Iphone 12 Screen Repair",
-    _id: "iphone 12 screen repair",
-    stock: 5,
-    category: "Phone Repair",
-    images: [
-      {
-        url: "https://www.twinstiarasandtantrums.com/wp-content/uploads/2022/05/smashed_iphone_c249ecb5-533c-4da2-85bf-85cb758592f7-v1623249323723.png",
-      },
-    ],
-  },
-  {
-    price: 60,
-    etoc: "45 mins",
-    name: "Iphone 7 Screen Repair",
-    _id: "Iphone 7 Screen Repair",
-    stock: 2,
-    category: "Phone Repair",
-    images: [
-      {
-        url: "https://www.twinstiarasandtantrums.com/wp-content/uploads/2022/05/smashed_iphone_c249ecb5-533c-4da2-85bf-85cb758592f7-v1623249323723.png",
-      },
-    ],
-  },
-];
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllServices } from "../redux/actions/serviceAction";
+import { useSetCategories } from "../utils/hooks";
 
 const Home = () => {
   const [category, setCategory] = useState("");
   const [activeSearch, setActiveSearch] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [categories, setCategories] = useState([]);
 
   const navigate = useNavigation();
+
+  const dispatch = useDispatch();
+  const isFocused = useIsFocused();
+
+  const { services } = useSelector((state) => state.service);
 
   const categoryButtonHandler = (id) => {
     setCategory(id);
@@ -65,6 +34,17 @@ const Home = () => {
   const addToCartHandler = (id) => {
     console.log("Add To Cart", id);
   };
+
+  useSetCategories(setCategories, isFocused);
+
+  useEffect(() => {
+    const timeOutId = setTimeout(() => {
+      dispatch(getAllServices(searchQuery, category));
+    }, 500);
+    return () => {
+      clearTimeout(timeOutId);
+    };
+  }, [dispatch, searchQuery, category, isFocused]);
 
   return (
     <>
@@ -91,7 +71,7 @@ const Home = () => {
             height: 35,
           }}
         >
-          ETOC ✹ (Estimated Time Of Completion) On All Services
+          ETOC ✹ Estimated Time Of Completion On All Services
         </Text>
         {/* Heading Row*/}
         <View

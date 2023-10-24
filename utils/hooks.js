@@ -2,6 +2,9 @@ import { useEffect } from "react";
 import Toast from "react-native-toast-message";
 import { useSelector } from "react-redux";
 import { loadUser } from "../redux/actions/userActions";
+import axios from "axios";
+import { server } from "../redux/store";
+import { useIsFocused } from "@react-navigation/native";
 
 export const useMessageAndErrorFromUser = (
   navigation,
@@ -72,4 +75,22 @@ export const useMessageAndErrorFromOther = (
   }, [error, message, dispatch]);
 
   return loading;
+};
+
+
+export const useSetCategories = (setCategories, isFocused) => {
+  
+  useEffect(() => {
+    axios
+      .get(`${server}/service/categories`)
+      .then((res) => {
+        setCategories(res.data.categories);
+      })
+      .catch((e) => {
+        Toast.show({
+          type: "error",
+          text1: e.response.data.message,
+        });
+      });
+  }, [isFocused]);
 };

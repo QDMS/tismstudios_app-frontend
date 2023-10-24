@@ -14,31 +14,24 @@ import Carousel from "react-native-snap-carousel";
 import { Avatar, Button } from "react-native-paper";
 import Toast from "react-native-toast-message";
 import IconOptions from "../components/IconOptions";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useIsFocused } from "@react-navigation/native";
+import { getServiceDetails } from "../redux/actions/serviceAction";
 
 const SLIDER_WIDTH = Dimensions.get("window").width;
 const ITEM_WIDTH = SLIDER_WIDTH;
 
-
 const ServiceDetails = ({ route: { params } }) => {
-  console.log(params.id);
-  const name = "Iphone 12 Screen Repair";
-  const price = "100";
-  const etoc = "1 hour";
-  const stock = 4;
-  const description =
-    "In need of iPhone repair services? Discover the step-by-step process of getting your iPhone repaired by professionals, ensuring a smooth and hassle-free experience.";
+  const {
+    service: { name, price, etoc, stock, description, images },
+  } = useSelector((state) => state.service);
+
   const isCarousel = useRef(null);
   const [quantity, setQuantity] = useState(1);
-  const images = [
-    {
-      id: "imageId0",
-      url: "https://www.twinstiarasandtantrums.com/wp-content/uploads/2022/05/smashed_iphone_c249ecb5-533c-4da2-85bf-85cb758592f7-v1623249323723.png",
-    },
-    {
-      id: "imageId1",
-      url: "https://idapgroup.com/blog/blog/wp-content/uploads/2020/12/image1.png",
-    },
-  ];
+
+  const dispatch = useDispatch();
+  const isFocused = useIsFocused();
 
   const incrementQty = () => {
     if (stock <= quantity) return;
@@ -57,6 +50,10 @@ const ServiceDetails = ({ route: { params } }) => {
       });
     Toast.show({ type: "success", text1: "Added To Cart" });
   };
+
+  useEffect(() => {
+    dispatch(getServiceDetails(params.id));
+  }, [dispatch, isFocused]);
 
   return (
     <View
