@@ -15,6 +15,7 @@ import { getAllServices } from "../redux/actions/serviceAction";
 import { useSetCategories } from "../utils/hooks";
 import Toast from "react-native-toast-message";
 
+
 const Home = () => {
   const [category, setCategory] = useState("");
   const [activeSearch, setActiveSearch] = useState(false);
@@ -81,18 +82,7 @@ const Home = () => {
         {/* <ScrollView showsVerticalScrollIndicator={false}> */}
         {/* Header */}
         <Header back={false} />
-        <Text
-          style={{
-            maxWidth: 220,
-            fontSize: 12,
-            position: "absolute",
-            top: 70,
-            left: 30,
-            height: 35,
-          }}
-        >
-          ETOC ✹ Estimated Time Of Completion On All Services
-        </Text>
+        
         {/* Heading Row*/}
         <View
           style={{
@@ -108,7 +98,7 @@ const Home = () => {
             <Text style={{ fontSize: 25, alignSelf: "center"  }}><SpinningTS/></Text>
             <Text style={{ fontSize: 20, fontWeight: "900" }}>services</Text>
           </View> */}
-            <View style={{ flexDirection: "column", paddingHorizontal: 75 }}>
+            <View style={{ flexDirection: "column",top: -60, paddingHorizontal: 75 }}>
               <Text style={{ fontSize: 25, alignSelf: "center" }}>
                 <SpinningTS />
               </Text>

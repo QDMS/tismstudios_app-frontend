@@ -45,6 +45,7 @@ const Orders = () => {
                   key={item._id}
                   id={item._id}
                   i={index}
+                  etoc={item.etoc}
                   price={item.totalAmount}
                   status={item.orderStatus}
                   paymentMethod={item.paymentMethod}

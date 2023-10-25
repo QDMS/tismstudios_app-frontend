@@ -118,7 +118,7 @@ const ServiceDetails = ({ route: { params } }) => {
             alignSelf: "flex-start",
           }}
         >
-          <Text>ETOC {etoc}</Text>
+          <Text>ETC {etoc}</Text>
         </View>
         <View
           style={{

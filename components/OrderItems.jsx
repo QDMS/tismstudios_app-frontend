@@ -8,6 +8,7 @@ const OrderItems = ({
   price,
   address,
   phone,
+  etoc,
   orderedOn,
   status,
   paymentMethod,
@@ -38,6 +39,7 @@ const OrderItems = ({
       <TextBox title={"Status"} value={status} i={i} />
       <TextBox title={"Payment Method"} value={paymentMethod} i={i} />
       <TextBox title={"Phone Number"} value={phone} i={i} />
+      <TextBox title={"ETC"} value={etoc} i={i} />
 
       {admin && (
         <Button

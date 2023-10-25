@@ -21,6 +21,7 @@ const ServiceCard = ({
     >
       <View
         style={{
+          
           elevation: 15,
           width: 250,
           alignItems: "center",
@@ -94,7 +95,7 @@ const ServiceCard = ({
                 alignSelf: "center",
               }}
             >
-              (ETOC)
+              (ETC)
             </Text>
             <Text
               numberOfLines={1}
