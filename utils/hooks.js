@@ -1,11 +1,12 @@
 import { useEffect } from "react";
 import Toast from "react-native-toast-message";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { loadUser } from "../redux/actions/userActions";
 import axios from "axios";
 import { server } from "../redux/store";
 import { useIsFocused } from "@react-navigation/native";
 import { useState } from "react";
+import { getAdminServices } from "../redux/actions/serviceAction";
 
 export const useMessageAndErrorFromUser = (
   navigation,
@@ -118,4 +119,27 @@ export const useGetOrders = (isFocused, isAdmin = false) => {
     loading,
     orders,
   };
+};
+
+export const useAdminServices = (dispatch, isFocused) => {
+  const { services, inStock, outOfStock, error, loading } = useSelector(
+    (state) => state.service
+  );
+
+  useEffect(() => {
+    if (error) {
+      Toast.show({
+        type: "error",
+        text1: error,
+      });
+      dispatch({
+        type: "clearError",
+      });
+    }
+    dispatch(getAdminServices());
+  }, [dispatch, isFocused, error]);
+
+  return {
+    services, inStock, outOfStock, loading
+  }
 };

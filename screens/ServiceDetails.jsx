@@ -180,7 +180,7 @@ const style = StyleSheet.create({
   },
   image: {
     width: ITEM_WIDTH,
-    resizeMode: "contain",
+    resizeMode: "cover",
     height: 250,
     borderRadius: 350,
     overflow: "hidden",

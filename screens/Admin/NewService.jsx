@@ -14,31 +14,55 @@ import {
   colors,
   authStyles as styles,
 } from "../../styles/styles";
-import RotatingStarLoader from "../../components/RotatingStarLoader";
 import { Avatar, Button, TextInput } from "react-native-paper";
 import { inputStyling } from "./../../styles/styles";
 import SelectComponent from "./../../components/SelectComponent";
+import { useMessageAndErrorFromOther, useSetCategories } from "../../utils/hooks";
+import { useIsFocused } from "@react-navigation/native";
+import { useDispatch } from "react-redux";
+import { getType } from "mime";
+import { createService } from "../../redux/actions/otherActions";
 
 const NewService = ({ navigation, route }) => {
-  const loading = false;
+  const isFocused = useIsFocused();
+  const dispatch = useDispatch();
+  const [visible, setVisible] = useState(false);
 
   const [name, setName] = useState("");
   const [image, setImage] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
   const [stock, setStock] = useState("");
-  const [category, setCategory] = useState("Phone Repair");
-  const [categoryID, setCategoryID] = useState("");
-  const [categories, setCategories] = useState([
-    { _id: "Phone Repair", category: "Phone Repair" },
-    { _id: "Computer Repair", category: "Computer Repair" },
-    { _id: "App Development", category: "App Development" },
-  ]);
-  const [visible, setVisible] = useState(false);
+  const [etoc, setEtoc] = useState("");
+  const [category, setCategory] = useState("Choose a category");
+  const [categoryID, setCategoryID] = useState(undefined);
+  const [categories, setCategories] = useState([]);
+
+  useSetCategories(setCategories, isFocused);
+
+  const disableBtn =
+    !name || !description || !price || !etoc || !stock || !image;
 
   const submitHandler = () => {
-    console.log(name, price, stock, description, categoryID);
+    const myForm = new FormData();
+
+    myForm.append("name", name);
+    myForm.append("description", description);
+    myForm.append("price", price);
+    myForm.append("etoc", etoc);
+    myForm.append("stock", stock);
+    myForm.append("file", {
+      uri: image,
+      type: getType(image),
+      name: image.split("/").pop(),
+    });
+
+    if (categoryID) myForm.append("category", categoryID);
+
+    dispatch(createService(myForm));
   };
+
+  const loading = useMessageAndErrorFromOther(dispatch, navigation, "adminPanel")
 
   useEffect(() => {
     if (route.params?.image) {
@@ -62,9 +86,7 @@ const NewService = ({ navigation, route }) => {
           </Text>
           <Text style={headingText}>Add New Service</Text>
         </View>
-        {loading ? (
-          <RotatingStarLoader />
-        ) : (
+     
           <ScrollView
             style={{
               padding: 20,
@@ -164,6 +186,18 @@ const NewService = ({ navigation, route }) => {
                   underlineColorAndroid="transparent"
                 />
               </View>
+              <View style={styles.inputContainer}>
+                <TextInput
+                  style={styles.inputField}
+                  //   {...inputOptions}
+                  selectionColor={colors.color1}
+                  placeholder="ETC"
+                  value={etoc}
+                  onChangeText={setEtoc}
+                  keyboardType="name-phone-pad"
+                  underlineColorAndroid="transparent"
+                />
+              </View>
               <Text
                 style={{
                   ...inputStyling,
@@ -179,18 +213,19 @@ const NewService = ({ navigation, route }) => {
                 style={{
                   backgroundColor: colors.color1,
                   margin: 20,
-                  padding: 6,
+                    padding: 6,
+                  bottom: 10
                 }}
                 textColor={colors.color2}
                 onPress={submitHandler}
                 loading={loading}
-                disabled={loading}
+                disabled={disableBtn || loading}
               >
                 CREATE
               </Button>
             </View>
           </ScrollView>
-        )}
+    
       </View>
       <SelectComponent
         categories={categories}

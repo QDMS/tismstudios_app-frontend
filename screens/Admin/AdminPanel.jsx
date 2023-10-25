@@ -5,14 +5,20 @@ import Header from "../../components/Header";
 import SpinningTS from "../../components/SpinningTS";
 import RotatingStarLoader from "../../components/RotatingStarLoader";
 import ButtonBox from "../../components/ButtonBox";
-import ProductListHeading from "../../components/ServiceListHeading";
+import ServiceListHeading from "../../components/ServiceListHeading";
 import ServiceListItems from "../../components/ServiceListItems";
 import Chart from "../../components/Chart";
-
-const services = [];
+import { useAdminServices } from "../../utils/hooks";
+import { useDispatch } from "react-redux";
+import { useIsFocused } from "@react-navigation/native";
 
 const AdminPanel = ({ navigation }) => {
-  const loading = false;
+  const dispatch = useDispatch();
+  const isFocused = useIsFocused();
+
+
+  const { loading, services, inStock, outOfStock } = useAdminServices(dispatch, isFocused);
+
   const navigationHandler = (text) => {
     switch (text) {
       case "Category":
@@ -58,7 +64,7 @@ const AdminPanel = ({ navigation }) => {
               alignItems: "center",
             }}
           >
-            <Chart inStock={12} outOfStock={2} />
+            <Chart inStock={inStock} outOfStock={outOfStock} />
           </View>
 
           <View>
@@ -88,7 +94,7 @@ const AdminPanel = ({ navigation }) => {
             </View>
           </View>
 
-          <ProductListHeading />
+          <ServiceListHeading />
           <ScrollView showsVerticalScrollIndicator={false}>
             <View>
               {services.map((item, index) => (
@@ -101,7 +107,7 @@ const AdminPanel = ({ navigation }) => {
                   price={item.price}
                   stock={item.stock}
                   name={item.name}
-                  category={item.category}
+                  category={item.category?.category}
                   imgSrc={item.images[0].url}
                 />
               ))}

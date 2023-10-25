@@ -12,6 +12,13 @@ import Header from "../../components/Header";
 import SpinningTS from "../../components/SpinningTS";
 import ImageCard from "../../components/ImageCard";
 import { Avatar, Button } from "react-native-paper";
+import { useMessageAndErrorFromOther } from "../../utils/hooks";
+import { useDispatch } from "react-redux";
+import { getType } from "mime";
+import {
+  deleteServiceImage,
+  updateServiceImage,
+} from "../../redux/actions/otherActions";
 
 const ServiceImages = ({ navigation, route }) => {
   const [images] = useState(route.params.images);
@@ -19,21 +26,36 @@ const ServiceImages = ({ navigation, route }) => {
   const [image, setImage] = useState(null);
   const [imageChanged, setImageChanged] = useState(false);
 
-  const loading = false;
+  const dispatch = useDispatch();
 
-  const deleteHandler = (id) => {
-    console.log("Image Id", id);
-    console.log("Service Id", serviceId);
+  const loading = useMessageAndErrorFromOther(
+    dispatch,
+    navigation,
+    "adminPanel"
+  );
+
+  const deleteHandler = (imageId) => {
+    dispatch(deleteServiceImage(serviceId, imageId));
   };
 
-  const submitHandler = () => {};
+  const submitHandler = () => {
+    const myForm = new FormData();
+
+    myForm.append("file", {
+      uri: image,
+      type: getType(image),
+      name: image.split("/").pop(),
+    });
+
+    dispatch(updateServiceImage(serviceId, myForm));
+  };
 
   useEffect(() => {
     if (route.params?.image) {
       setImage(route.params.image);
       setImageChanged(true);
     }
-  }, [route.params, setImage]);
+  }, [route.params]);
 
   return (
     <View style={{ ...defaultStyles, backgroundColor: colors.color5 }}>

@@ -13,4 +13,4 @@ export const store = configureStore({
   },
 });
 
-export const server = "https://tismstudioapp-server.onrender.com/api/v1";
+export const server = "https://tismstudios-server-app-79b3cfc3687b.herokuapp.com/api/v1";

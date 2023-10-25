@@ -17,6 +17,27 @@ export const otherReducer = createReducer({}, (builder) => {
     .addCase("processOrderRequest", (state) => {
       state.loading = true;
     })
+    .addCase("addCategoryRequest", (state) => {
+      state.loading = true;
+    })
+    .addCase("deleteCategoryRequest", (state) => {
+      state.loading = true;
+    })
+    .addCase("addServiceRequest", (state) => {
+      state.loading = true;
+    })
+    .addCase("updateServiceRequest", (state) => {
+      state.loading = true;
+    })
+    .addCase("updateServiceImageRequest", (state) => {
+      state.loading = true;
+    })
+    .addCase("deleteServiceImageRequest", (state) => {
+      state.loading = true;
+    })
+    .addCase("deleteServiceRequest", (state) => {
+      state.loading = true;
+    })
     .addCase("updatePasswordSuccess", (state, action) => {
       state.loading = false;
       state.message = action.payload;
@@ -30,6 +51,30 @@ export const otherReducer = createReducer({}, (builder) => {
       state.message = action.payload;
     })
     .addCase("placeOrderSuccess", (state, action) => {
+      state.loading = false;
+      state.message = action.payload;
+    })
+    .addCase("addCategorySuccess", (state, action) => {
+      state.loading = false;
+      state.message = action.payload;
+    })
+    .addCase("deleteCategorySuccess", (state, action) => {
+      state.loading = false;
+      state.message = action.payload;
+    })
+    .addCase("addServiceSuccess", (state, action) => {
+      state.loading = false;
+      state.message = action.payload;
+    })
+    .addCase("updateServiceSuccess", (state, action) => {
+      state.loading = false;
+      state.message = action.payload;
+    })
+    .addCase("updateServiceImageSuccess", (state, action) => {
+      state.loading = false;
+      state.message = action.payload;
+    })
+    .addCase("deleteServiceImageSuccess", (state, action) => {
       state.loading = false;
       state.message = action.payload;
     })
@@ -54,6 +99,30 @@ export const otherReducer = createReducer({}, (builder) => {
       state.error = action.payload;
     })
     .addCase("processOrderFail", (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    })
+    .addCase("addCategoryFail", (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    })
+    .addCase("deleteCategoryFail", (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    })
+    .addCase("addServiceFail", (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    })
+    .addCase("updateServiceFail", (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    })
+    .addCase("updateServiceImageFail", (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    })
+    .addCase("deleteServiceImageFail", (state, action) => {
       state.loading = false;
       state.error = action.payload;
     });

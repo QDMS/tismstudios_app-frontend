@@ -62,7 +62,7 @@ const ServiceListItems = ({
             }}
             numberOfLines={3}
           >
-            ${name}
+            {name}
           </Text>
 
           <Text

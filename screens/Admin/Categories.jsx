@@ -15,21 +15,22 @@ import {
 import SpinningTS from "../../components/SpinningTS";
 import Header from "../../components/Header";
 import { Avatar, Button, TextInput } from "react-native-paper";
+import { useMessageAndErrorFromOther, useSetCategories } from "../../utils/hooks";
+import { useIsFocused } from "@react-navigation/native";
+import { useDispatch } from "react-redux";
+import { addCategory, deleteCategory } from "../../redux/actions/otherActions";
 
-const categories = [
-  { name: "Tablet Repair", _id: "Tablet Repair" },
-  { name: "Software Consultant", _id: "Software Consultant" },
-  { name: "Pet Cams", _id: "Pet Cams" },
-  { name: "Phone Repair", _id: "Phone Repair" },
-  { name: "Web Development", _id: "Web Development" },
-  { name: "Mobile App Development", _id: "Mobile App Development" },
-  { name: "Game Development", _id: "Game Development" },
-  { name: "Computer Repair", _id: "Computer Repair" },
-  { name: "Graphics Design", _id: "Graphics Design" },
-];
-
-const Categories = () => {
+const Categories = ({navigation}) => {
   const [category, setCategory] = useState("");
+  const [categories, setCategories] = useState([])
+
+
+  const isFocused = useIsFocused();
+  const dispatch = useDispatch();
+
+  useSetCategories(setCategories, isFocused)
+
+  const loading = useMessageAndErrorFromOther(dispatch, navigation, "adminPanel")
 
   const inputOptions = {
     style: inputStyling,
@@ -38,11 +39,13 @@ const Categories = () => {
 
   const deleteHandler = (id) => {
     console.log(`Deleting Category, ${id}`);
+
+    dispatch(deleteCategory(id))
   };
 
-  const submitHandler = () => {};
-
-  const loading = true;
+  const submitHandler = () => {
+    dispatch(addCategory(category))
+  };
 
   return (
     <View style={{ ...defaultStyles, backgroundColor: colors.color5 }}>
@@ -74,7 +77,7 @@ const Categories = () => {
         >
           {categories.map((i) => (
             <CategoryCard
-              name={i.name}
+              name={i.category}
               id={i._id}
               key={i._id}
               deleteHandler={deleteHandler}

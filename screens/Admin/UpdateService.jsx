@@ -12,56 +12,63 @@ import RotatingStarLoader from "../../components/RotatingStarLoader";
 import { Button, TextInput } from "react-native-paper";
 import { inputStyling } from "./../../styles/styles";
 import SelectComponent from "./../../components/SelectComponent";
+import {
+  useMessageAndErrorFromOther,
+  useSetCategories,
+} from "../../utils/hooks";
+import { useIsFocused } from "@react-navigation/native";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { getServiceDetails } from "../../redux/actions/serviceAction";
+import { updateService } from "../../redux/actions/otherActions";
 
 const UpdateService = ({ navigation, route }) => {
-  const loading = false;
-  const loadingOther = false;
 
-  const images = [
-    {
-      url: "https://www.twinstiarasandtantrums.com/wp-content/uploads/2022/05/smashed_iphone_c249ecb5-533c-4da2-85bf-85cb758592f7-v1623249323723.png",
-      _id: "computerrepair_1920x720",
-    },
-    {
-      url: "https://assets-global.website-files.com/6410ebf8e483b5bb2c86eb27/6410ebf8e483b53d6186fc53_ABM%20College%20Web%20developer%20main.jpg",
-      _id: "webdeve",
-    },
-    {
-      url: "https://www.sectorlink.com/img/blog/web-devel-important.jpg",
-      _id: "code1",
-    },
-    {
-      url: "https://media.geeksforgeeks.org/wp-content/cdn-uploads/20191206194406/Tips-For-an-Indie-Game-Developer.png",
-      _id: "game1",
-    },
-    {
-      url: "https://ampakcellular.com/wp-content/uploads/2021/05/tablet-repair-services-500x500-1.jpg",
-      _id: "tabletzxaasaczzcxdvfszxcv",
-    },
-    {
-      url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR1namik09N-FGtTbIKWnXNyw1FoHSiE5Mc1A&usqp=CAU",
-      _id: "repair5",
-    },
-  ];
+  const isFocused = useIsFocused();
+  const dispatch = useDispatch();
+  const [visible, setVisible] = useState(false);
+
+  const { service, loading } = useSelector((state) => state.service);
 
   const [id] = useState(route.params.id);
 
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
-  const [price, setPrice] = useState("");
-  const [stock, setStock] = useState("");
-  const [category, setCategory] = useState("Phone Repair");
-  const [categoryID, setCategoryID] = useState("");
-  const [categories, setCategories] = useState([
-    { _id: "Phone Repair", category: "Phone Repair" },
-    { _id: "Computer Repair", category: "Computer Repair" },
-    { _id: "App Development", category: "App Development" },
-  ]);
-  const [visible, setVisible] = useState(false);
+  const [name, setName] = useState('');
+  const [description, setDescription] = useState('');
+  const [price, setPrice] = useState('');
+  const [stock, setStock] = useState('');
+  const [etoc, setEtoc] = useState('');
+  const [category, setCategory] = useState('');
+  const [categoryID, setCategoryID] = useState('');
+  const [categories, setCategories] = useState([]);
+
+  useSetCategories(setCategories, isFocused);
 
   const submitHandler = () => {
-    console.log(name, price, stock, description, categoryID);
+
+    dispatch(updateService(id, name, description, price, stock, etoc, categoryID))
   };
+
+  const loadingOther = useMessageAndErrorFromOther(
+    dispatch,
+    navigation,
+    "adminPanel"
+  );
+
+  useEffect(() => {
+    dispatch(getServiceDetails(id));
+  }, [dispatch, id, isFocused]);
+
+  useEffect(() => {
+    if (service) {
+      setName(service.name);
+      setDescription(service.description);
+      setPrice(String(service.price));
+      setStock(String(service.stock));
+      setEtoc(String(service.etoc));
+      setCategory(service.category?.category);
+      setCategoryID(service.category?._id);
+    }
+  }, [service]);
 
   return (
     <>
@@ -93,14 +100,14 @@ const UpdateService = ({ navigation, route }) => {
             <View
               style={{
                 justifyContent: "center",
-                height: 750,
+                height: 800,
               }}
             >
               <Button
                 onPress={() =>
                   navigation.navigate("serviceImages", {
                     id,
-                    images,
+                    images: service.images,
                   })
                 }
                 textColor={colors.color1_light2}
@@ -152,6 +159,18 @@ const UpdateService = ({ navigation, route }) => {
                   value={stock}
                   onChangeText={setStock}
                   keyboardType="number-pad"
+                  underlineColorAndroid="transparent"
+                />
+              </View>
+              <View style={styles.inputContainer}>
+                <TextInput
+                  style={styles.inputField}
+                  //   {...inputOptions}
+                  selectionColor={colors.color1}
+                  placeholder="ETC"
+                  value={etoc}
+                  onChangeText={setEtoc}
+                  keyboardType="name-phone-pad"
                   underlineColorAndroid="transparent"
                 />
               </View>
