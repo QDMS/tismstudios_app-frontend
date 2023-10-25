@@ -4,20 +4,116 @@ import { colors, defaultStyles } from "../styles/styles";
 import Header from "../components/Header";
 import Heading from "../components/Heading";
 import { Button, RadioButton } from "react-native-paper";
+import { useDispatch, useSelector } from "react-redux";
+import { placeOrder } from "../redux/actions/otherActions";
+import { useMessageAndErrorFromOther } from "../utils/hooks";
+import { useStripe } from "@stripe/stripe-react-native";
+import Toast from "react-native-toast-message";
+import axios from "axios";
+import { server } from "../redux/store";
+import RotatingStarLoader from "../components/RotatingStarLoader";
 
 const Payments = ({ navigation, route }) => {
   const [paymentMethod, setPaymentMethod] = useState("COD");
-  const isAuthenticated = true;
+  const [loaderLoading, setLoaderLoading] = useState(false);
+  const dispatch = useDispatch();
+  const stripe = useStripe();
+
+  const { isAuthenticated, user } = useSelector((state) => state.user);
+  const { cartItems } = useSelector((state) => state.cart);
 
   const redirectToLogin = () => {
-    navigation.navigate("login")
+    navigation.navigate("login");
   };
 
-  const codHandler = () => {};
+  const codHandler = (paymentInfo) => {
+    const shippingInfo = {
+      address: user.address,
+      city: user.city,
+      usState: user.usState,
+      zipCode: user.zipCode,
+      phone: user.phone,
+    };
+    const itemsPrice = route.params.itemsPrice;
+    const shippingCharges = route.params.shippingCharges;
+    const taxPrice = route.params.tax;
+    const totalAmount = route.params.totalAmount;
 
-  const onlineHandler = () => {};
+    dispatch(
+      placeOrder(
+        cartItems,
+        shippingInfo,
+        paymentMethod,
+        itemsPrice,
+        taxPrice,
+        shippingCharges,
+        totalAmount,
+        paymentInfo
+      )
+    );
+  };
 
-  return (
+  const onlineHandler = async () => {
+    try {
+      const {
+        data: { client_secret },
+      } = await axios.post(
+        `${server}/order/payment`,
+        {
+          totalAmount: route.params.totalAmount,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        }
+      );
+
+      const init = await stripe.initPaymentSheet({
+        paymentIntentClientSecret: client_secret,
+        merchantDisplayName: "6PackEcom",
+      });
+
+      if (init.error)
+        return Toast.show({ type: "error", text1: init.error.message });
+
+      const presentSheet = await stripe.presentPaymentSheet();
+      setLoaderLoading(true);
+
+      if (presentSheet.error) {
+        setLoaderLoading(false);
+        return Toast.show({ type: "error", text1: presentSheet.error.message });
+      }
+
+      const { paymentIntent } = await stripe.retrievePaymentIntent(
+        client_secret
+      );
+
+      if (paymentIntent.status === "Succeeded") {
+        codHandler({ id: paymentIntent.id, status: paymentIntent.status });
+      }
+    } catch (error) {
+      return Toast.show({
+        type: "error",
+        text1: "Internal Server Error",
+        text2: error,
+      });
+    }
+  };
+
+  const loading = useMessageAndErrorFromOther(
+    dispatch,
+    navigation,
+    "profile",
+    () => ({
+      type: "clearCart",
+    })
+  );
+
+  return loaderLoading ? (
+    <RotatingStarLoader />
+  ) : (
     <View style={defaultStyles}>
       <Header back={true} />
       <Heading text1="Payment" text2="Method" />
@@ -37,15 +133,18 @@ const Payments = ({ navigation, route }) => {
         </RadioButton.Group>
       </View>
       <TouchableOpacity
+        disabled={loading}
         onPress={
           !isAuthenticated
             ? redirectToLogin
             : paymentMethod === "COD"
-            ? codHandler
+            ? () => codHandler()
             : onlineHandler
         }
       >
         <Button
+          loading={loading}
+          disabled={loading}
           style={styles.btn}
           textColor={colors.color2}
           icon={paymentMethod === "COD" ? "check-decagram" : "circle-multiple"}

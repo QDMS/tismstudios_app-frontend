@@ -77,9 +77,7 @@ export const useMessageAndErrorFromOther = (
   return loading;
 };
 
-
 export const useSetCategories = (setCategories, isFocused) => {
-  
   useEffect(() => {
     axios
       .get(`${server}/service/categories`)

@@ -42,7 +42,13 @@ export const updateProfile =
       const { data } = await axios.put(
         `${server}/user/updateprofile`,
         {
-          name, email, phone, address, city, usState, zipCode
+          name,
+          email,
+          phone,
+          address,
+          city,
+          usState,
+          zipCode,
         },
         {
           headers: { "Content-Type": "application/json" },
@@ -62,26 +68,75 @@ export const updateProfile =
     }
   };
 
-  export const updatePic = (formData) => async (dispatch) => {
+export const updatePic = (formData) => async (dispatch) => {
+  try {
+    dispatch({
+      type: "updatePicRequest",
+    });
+
+    const { data } = await axios.put(`${server}/user/updatepic`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      withCredentials: true,
+    });
+
+    dispatch({
+      type: "updatePicSuccess",
+      payload: data.message,
+    });
+  } catch (error) {
+    dispatch({
+      type: "updatePicFail",
+      payload: error.response.data.message,
+    });
+  }
+};
+
+export const placeOrder =
+  (
+    orderItems,
+    shippingInfo,
+    paymentMethod,
+    itemsPrice,
+    taxPrice,
+    shippingCharges,
+    totalAmount,
+    paymentInfo
+  ) =>
+  async (dispatch) => {
     try {
       dispatch({
-        type: "updatePicRequest",
+        type: "placeOrderRequest",
       });
-  
-      const { data } = await axios.put(`${server}/user/updatepic`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
+    
+      const { data } = await axios.post(
+        `${server}/order/new`,
+        {
+          shippingInfo,
+          orderItems,
+          paymentMethod,
+          paymentInfo,
+          itemsPrice,
+          taxPrice,
+          shippingCharges,
+          totalAmount,
         },
-        withCredentials: true,
-      });
-  
+        {
+          headers: { "Content-Type": "application/json" },
+          withCredentials: true,
+        }
+      );
+      
       dispatch({
-        type: "updatePicSuccess",
+        type: "placeOrderSuccess",
         payload: data.message,
       });
+    
     } catch (error) {
+   
       dispatch({
-        type: "updatePicFail",
+        type: "placeOrderFail",
         payload: error.response.data.message,
       });
     }
