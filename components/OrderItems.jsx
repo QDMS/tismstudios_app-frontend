@@ -7,6 +7,7 @@ const OrderItems = ({
   id,
   price,
   address,
+  phone,
   orderedOn,
   status,
   paymentMethod,
@@ -26,6 +27,7 @@ const OrderItems = ({
         style={{
           ...styles.text,
           backgroundColor: i % 2 === 0 ? colors.color3 : colors.color1,
+          textAlign: "center",
         }}
       >
         ID - #{id}
@@ -35,6 +37,7 @@ const OrderItems = ({
       <TextBox title={"Price"} value={price} i={i} />
       <TextBox title={"Status"} value={status} i={i} />
       <TextBox title={"Payment Method"} value={paymentMethod} i={i} />
+      <TextBox title={"Phone Number"} value={phone} i={i} />
 
       {admin && (
         <Button

@@ -11,7 +11,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { colors, defaultStyles } from "../styles/styles";
 import Header from "../components/Header";
 import Carousel from "react-native-snap-carousel";
-import { Avatar, Button } from "react-native-paper";
+import { Avatar, Button, TextInput } from "react-native-paper";
 import Toast from "react-native-toast-message";
 import IconOptions from "../components/IconOptions";
 import { useEffect } from "react";
@@ -34,7 +34,8 @@ const ServiceDetails = ({ route: { params } }) => {
   const isFocused = useIsFocused();
 
   const incrementQty = () => {
-    if (stock <= quantity) return;
+    if (stock <= quantity)
+      return Toast.show({ type: "error", text1: "Maximum Quantity Value" });
     setQuantity((prev) => prev + 1);
   };
   const decrementQty = () => {

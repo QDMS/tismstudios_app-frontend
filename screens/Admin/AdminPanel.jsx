@@ -6,10 +6,10 @@ import SpinningTS from "../../components/SpinningTS";
 import RotatingStarLoader from "../../components/RotatingStarLoader";
 import ButtonBox from "../../components/ButtonBox";
 import ProductListHeading from "../../components/ServiceListHeading";
-
 import ServiceListItems from "../../components/ServiceListItems";
-import { services } from "../Home";
 import Chart from "../../components/Chart";
+
+const services = [];
 
 const AdminPanel = ({ navigation }) => {
   const loading = false;

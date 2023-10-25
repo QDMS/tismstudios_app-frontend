@@ -6,38 +6,13 @@ import SpinningTS from "../components/SpinningTS";
 import RotatingStarLoader from "../components/RotatingStarLoader";
 import { Headline } from "react-native-paper";
 import OrderItems from "../components/OrderItems";
+import { useGetOrders } from "../utils/hooks";
+import { useIsFocused } from "@react-navigation/native";
 
-export const orders = [
-  {
-    _id: "dfbsdasacnuy",
-    shippingInfo: {
-      address: "326 Brookfield Road Unit A",
-      city: "Valdosta",
-      usState: "Georgia",
-      zipCode: "31602",
-    },
-    createdAt: "10/18/2023T2343",
-    orderStatus: "Processing",
-    paymentMethod: "COD",
-    totalAmount: 500,
-  },
-  {
-    _id: "hjgfkmjghkhgf",
-    shippingInfo: {
-      address: "3322 Thomas Street",
-      city: "Fort Myers",
-      usState: "Florida",
-      zipCode: "33916",
-    },
-    createdAt: "10/18/2023T2343",
-    orderStatus: "Completed",
-    paymentMethod: "ONLINE",
-    totalAmount: 5000,
-  },
-];
 
 const Orders = () => {
-  const loading = false;
+  const isFocused = useIsFocused();
+  const { loading, orders } = useGetOrders(isFocused);
 
   return (
     <View style={{ ...defaultStyles, backgroundColor: colors.color5 }}>
@@ -73,6 +48,7 @@ const Orders = () => {
                   price={item.totalAmount}
                   status={item.orderStatus}
                   paymentMethod={item.paymentMethod}
+                  phone={`${item.shippingInfo.phone}`}
                   orderedOn={item.createdAt.split("T")[0]}
                   address={`${item.shippingInfo.address}, ${item.shippingInfo.city} ${item.shippingInfo.usState}, ${item.shippingInfo.zipCode}`}
                 />

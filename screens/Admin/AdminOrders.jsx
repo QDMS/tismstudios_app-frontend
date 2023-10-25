@@ -5,13 +5,26 @@ import Header from "../../components/Header";
 import SpinningTS from "../../components/SpinningTS";
 import RotatingStarLoader from "../../components/RotatingStarLoader";
 import OrderItems from "../../components/OrderItems";
-import { orders } from "../Orders";
 import { Headline } from "react-native-paper";
+import { useIsFocused } from "@react-navigation/native";
+import { useGetOrders, useMessageAndErrorFromOther } from "../../utils/hooks";
+import { useDispatch } from "react-redux";
+import { processOrder } from "../../redux/actions/otherActions";
 
-const AdminOrders = () => {
-  const loading = false;
-  const processOrderLoading = false;
-  const updateHandler = () => {};
+const AdminOrders = ({ navigation }) => {
+  const isFocused = useIsFocused();
+  const dispatch = useDispatch();
+  const { loading, orders } = useGetOrders(isFocused, true);
+
+  const processOrderLoading = useMessageAndErrorFromOther(
+    dispatch,
+    navigation,
+    "adminPanel"
+  );
+
+  const updateHandler = (id) => {
+    dispatch(processOrder(id));
+  };
 
   return (
     <View style={{ ...defaultStyles, backgroundColor: colors.color5 }}>
@@ -48,6 +61,7 @@ const AdminOrders = () => {
                   price={item.totalAmount}
                   status={item.orderStatus}
                   paymentMethod={item.paymentMethod}
+                  phone={`${item.shippingInfo.phone}`}
                   orderedOn={item.createdAt.split("T")[0]}
                   address={`${item.shippingInfo.address}, ${item.shippingInfo.city} ${item.shippingInfo.usState}, ${item.shippingInfo.zipCode}`}
                   admin={true}
